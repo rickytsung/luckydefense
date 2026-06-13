@@ -83,6 +83,8 @@ def main():
     print("=" * 60)
 
     bucket_name = input("📌 請輸入 GCS 儲存桶名稱 (預設: perbase-prod-randomdice2): ").strip()
+    # perbase-prod-{}
+    # luckydefense, luckydefensesolo, cooptd
     if not bucket_name:
         bucket_name = "perbase-prod-randomdice2"
 

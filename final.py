@@ -147,13 +147,20 @@ def run_ultimate_pipeline():
                     ext = ".json" if cleaned.strip().startswith(b'{') else ".csv"
                     safe_name = name.replace(".csv", ext) if name.endswith(".csv") else name
                     
-                    with open(os.path.join(out_dir, safe_name), "wb") as out:
+                    # ✨ 修正：確保檔案所在的子資料夾被建立
+                    full_out_path = os.path.join(out_dir, safe_name)
+                    os.makedirs(os.path.dirname(full_out_path), exist_ok=True)
+                    
+                    with open(full_out_path, "wb") as out:
                         out.write(b'\xef\xbb\xbf') # 寫入 UTF-8 BOM
                         out.write(cleaned)
                     success += 1
                 else:
-                    # 解不開的暫存為 .bin
-                    with open(os.path.join(out_dir, "FAILED_" + name + ".bin"), "wb") as out:
+                    # ✨ 修正：解不開的 FAILED 暫存檔也確保資料夾路徑存在
+                    full_failed_path = os.path.join(out_dir, "FAILED_" + name + ".bin")
+                    os.makedirs(os.path.dirname(full_failed_path), exist_ok=True)
+                    
+                    with open(full_failed_path, "wb") as out:
                         out.write(raw)
                         
     except zipfile.BadZipFile:
